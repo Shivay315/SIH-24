@@ -9,13 +9,12 @@ app = Flask(__name__)
 
 # Example fantasy graph with imaginary distances
 fantasy_graph = {
-    'Eldoria': {'Stormspire': 10, 'Verdant Hollow': 15, "Dragon's Lair": 30},
+    'Eldoria': {'Stormspire': 10, 'Verdant Hollow': 15, 'Dragon\'s Lair': 30},
     'Stormspire': {'Eldoria': 10, 'Verdant Hollow': 5, 'Obsidian Peaks': 20},
     'Verdant Hollow': {'Eldoria': 15, 'Stormspire': 5, 'Obsidian Peaks': 10, 'Celestia Bay': 25},
     'Obsidian Peaks': {'Stormspire': 20, 'Verdant Hollow': 10, 'Celestia Bay': 15, 'Shadowfen': 50},
     'Celestia Bay': {'Verdant Hollow': 25, 'Obsidian Peaks': 15, 'Shadowfen': 10},
-    'Shadowfen': {'Obsidian Peaks': 10, 'Celestia Bay': 10},
-    "Dragon's Lair" : {'Eldoria' : 30}
+    'Shadowfen': {'Obsidian Peaks': 50, 'Celestia Bay': 10}
 }
 
 def bfs_shortest_path(graph, start, goal):
@@ -43,6 +42,8 @@ def bfs_shortest_path(graph, start, goal):
     return None
 
 def draw_graph(graph, path=None):
+    import matplotlib
+    matplotlib.use('Agg')  # Use a non-GUI backend
     G = nx.Graph()
     
     # Add nodes and edges
@@ -69,7 +70,7 @@ def draw_graph(graph, path=None):
     plt.savefig(img, format='png')
     img.seek(0)
     plot_url = base64.b64encode(img.getvalue()).decode()
-    plt.close()
+    plt.close('all')
     
     return plot_url
 

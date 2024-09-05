@@ -3,57 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fantasy Distance Finder</title>
+    <title>Routing</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label, select, button {
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        button {
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        #map {
+            height: 500px;
+            width: 100%;
+            margin-top: 20px;
+        }
+        #routeResult {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
     <h1>Fantasy Distance Finder</h1>
     
     <form id="routeForm">
         <label for="start">Start Location:</label>
-        <select id="start" name="start">
+        <select name="start" id="start" required>
             {% for location in locations %}
-                <option value="{{ location }}">{{ location }}</option>
+            <option value="{{ location }}">{{ location }}</option>
             {% endfor %}
         </select>
         
         <label for="goal">Goal Location:</label>
-        <select id="goal" name="goal">
+        <select name="goal" id="goal" required>
             {% for location in locations %}
-                <option value="{{ location }}">{{ location }}</option>
+            <option value="{{ location }}">{{ location }}</option>
             {% endfor %}
         </select>
         
         <button type="submit">Find Shortest Route</button>
     </form>
+
+    <div id="routeResult"></div>
+
+    <div id="map"></div>
     
-    <h2>Result:</h2>
-    <p id="route"></p>
-    <img id="graph" src="" alt="Graph will appear here" style="max-width: 100%; height: auto;">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
     
     <script>
-        document.getElementById('routeForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            
-            const formData = new FormData(event.target);
-            
-            fetch('/find_route', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    document.getElementById('route').textContent = data.error;
-                    document.getElementById('graph').src = '';
-                } else {
-                    document.getElementById('route').textContent = data.route;
-                    document.getElementById('graph').src = 'data:image/png;base64,' + data.plot_url;
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        });
+        // Create the map and set its initial view
+        var map = L.map('map').setView([28.2380, 83.9956], 11);
+        
+        // Add the OpenStreetMap tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // marker
+        var marker = L.marker([28.2380, 83.9956]).addTo(map);
+
+        L.Routing.control({
+            waypoints: [
+                L.latLng(28.684629, 77.208069),
+                L.latLng(28.608700, 77.014091)
+            ]
+        }).addTo(map);
     </script>
+
 </body>
 </html>

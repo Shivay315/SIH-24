@@ -47,8 +47,11 @@
     <table>
         <thead>
             <tr>
-                <th>Student Name</th>
+                <th>Driver Name</th>
+                <th>Bus Number</th>
                 <th>Date</th>
+                <th>Start Time</th>
+                <th>End Time</th>
                 <th>Status</th>
                 <th>Actions</th>
             </tr>
@@ -57,7 +60,10 @@
             {% for record in records %}
             <tr>
                 <td>{{ record.student_name }}</td>
+                <td>{{ record.bus }}</td>
                 <td>{{ record.date }}</td>
+                <td>{{ record.start_time }}</td>
+                <td>{{ record.end_time }}</td>
                 <td>{{ record.status }}</td>
                 <td>
                     <a href="{{ url_for('edit', id=record.id) }}">Edit</a>

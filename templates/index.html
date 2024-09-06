@@ -34,7 +34,7 @@
             font-size: 18px;
             font-weight: bold;
         }
-    </style>
+    </style>  
 </head>
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -60,7 +60,7 @@
         <label for="name">Driver Name:</label>
         <select name="name" id="name" required>
             {% for name, bus in drivers.items() %}
-            <option value="{{ bus }}">{{ name }}</option>
+            <option value="{{ bus }}">{{ name }} - {{ bus }}</option>
             {% endfor %}
         </select>
         

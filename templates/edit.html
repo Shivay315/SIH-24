@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Attendance Record</title>
+</head>
+<body>
+    <h1>Edit Attendance Record</h1>
+    <form method="post">
+        <label for="student_name">Student Name:</label>
+        <input type="text" id="student_name" name="student_name" value="{{ record.student_name }}" required><br>
+        <label for="bus">Bus:</label>
+        <input type="text" id="bus" name="bus" value="{{ record.bus }}" required><br>
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" value="{{ record.date }}" required><br>
+        <label for="status">Status:</label>
+        <select id="status" name="status" required>
+            <option value="Present" {% if record.status == 'Present' %}selected{% endif %}>Present</option>
+            <option value="Absent" {% if record.status == 'Absent' %}selected{% endif %}>Absent</option>
+        </select><br>
+        <button type="submit">Update Record</button>
+    </form>
+    <a href="{{ url_for('index') }}">Back to List</a>
+</body>
+</html>

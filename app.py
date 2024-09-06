@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///attendance1.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///attendance5.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -12,6 +12,8 @@ class Attendance(db.Model):
     student_name = db.Column(db.String(100), nullable=False)
     bus = db.Column(db.String(20), nullable=False)
     date = db.Column(db.String(50), nullable=False)
+    start_time = db.Column(db.String(50), nullable=True)
+    end_time = db.Column(db.String(50), nullable=True)
     status = db.Column(db.String(20), nullable=False)
 
     def __repr__(self):
@@ -27,10 +29,20 @@ drivers = {
     "Prince": "165a"
 }
 
+# Sample logins
+loginID = {
+    "Shivay" : "12345678"
+}
+
 @app.route('/')
+def login():
+    return render_template('login.html', loginID=loginID)  
+
+@app.route('/index')
 def index():
     records = Attendance.query.all()
-    return render_template('index.html', drivers=drivers, record=records)  # Keeps the index.html route
+    return render_template('index.html', drivers=drivers, record=records, loginID=loginID)
+    
 
 @app.route('/schedule')
 def schedule():
@@ -44,6 +56,8 @@ def add():
             student_name=request.form['student_name'],
             bus=request.form['bus'],
             date=request.form['date'],
+            start_time=request.form['start_time'],
+            end_time=request.form['end_time'],
             status=request.form['status']
         )
         db.session.add(new_record)
